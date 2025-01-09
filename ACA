@@ -1,0 +1,437 @@
+
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std;
+void dfs(int node, vector<int>vis,vector<int> adj[],vector<int>&ls ){
+    vis[node]=1;
+    ls.push_back(node);
+    for(auto it: adj[node]){
+        if(!vis[it]){
+            dfs(it,vis,adj,ls);
+        }
+    }
+}
+vector<int>dfsof(int n,vector<int> adj[] ){
+    int start=0;
+    vector<int>vis(n,0);
+    vector<int>ls;
+    dfs(start,vis,adj,ls);
+    return ls;
+}
+int main() {
+    int v=5;
+    vector<int>adj[v];
+    adj[0].push_back(1);
+    adj[0].push_back(2);
+    adj[1].push_back(0);
+    adj[1].push_back(3);
+    adj[2].push_back(0);
+    adj[2].push_back(4);
+    adj[3].push_back(1);
+    adj[4].push_back(2);
+    vector<int>res = dfsof(v,adj);
+    for(auto it: res){
+        cout<<it<<" ";
+    }
+    
+
+    return 0;
+}
+
+tc—O(N)+2*E;
+
+
+
+
+
+// Online C++ compiler to run C++ program online
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<int>solve(vector<int>a,int tar){
+    int l=0,r=0;
+    int currsum=0;
+    while(r<a.size()){
+        currsum+=a[r];
+        while(currsum>tar && l<r){
+            currsum-=a[l];
+            l++;
+        }
+        if(currsum==tar){
+            return {l,r};
+        }
+        r++;
+    }
+    return {};
+}
+int main() {
+    vector<int>a={1,2,3,4};
+    int tar=5;
+    vector<int>res=solve(a,tar);
+  if (res.empty()) {
+        cout << "No subarray found with the given sum." << endl;
+    } else {
+        cout << "Index range is from " << res[0] << " to " << res[1] << endl;
+    }
+
+   
+
+    return 0;
+}
+
+
+
+
+
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isbala(string str){
+    stack<int>st;
+    
+    for(char ch: str){
+        if(ch=='['||ch=='{'||ch=='(' ){
+            st.push(ch);
+        }
+        else{
+            if(st.empty()) return false;
+            char tp=st.top();
+            st.pop();
+            if(ch==']'&& tp!='['||ch=='}'&& tp!='{'||ch==')'&& tp!='(') return false;
+        }
+       
+    }
+     return st.empty();
+}
+
+int main() {
+    string str="[{()}]";
+    isbala(str);
+    if(isbala){
+        cout<<"bala"<<endl;
+    }
+    else{
+        cout<<"not bala"<<endl;
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node{
+    public:
+    int data;
+    Node* next;
+    Node(int val){
+        this->data=val;
+        this->next=NULL;
+    }
+};
+Node* solve(Node*l1,Node*l2){
+    Node*dummy=new Node(0);
+    Node*curr=dummy;
+    while(l1!=NULL && l2!=NULL){
+        if(l1->data<=l2->data){
+            curr->next=l1;
+            l1=l1->next;
+        }
+        else{
+            curr->next=l2;
+            l2=l2->next;
+        }
+        curr=curr->next;
+    }
+    curr->next=l1!=NULL? l1:l2;
+    Node* head=dummy->next;
+    delete dummy;
+    return head;
+}
+void printList(Node* head) {
+    while (head != NULL) {
+        cout << head->data << " ";
+        head = head->next;
+    }
+    cout << endl;
+}
+int main() {
+    Node* l1 = new Node(1);
+    l1->next = new Node(3);
+    l1->next->next = new Node(4);
+
+    Node* l2 = new Node(2);
+    l2->next = new Node(6);
+
+    cout << "List 1: ";
+    printList(l1);
+
+    cout << "List 2: ";
+    printList(l2);
+
+    Node* res = solve(l1, l2);
+    cout << "Merged Sorted List: ";
+    printList(res);
+
+    return 0;
+}
+// Online C++ compiler to run C++ program online
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node{
+    public:
+    int data;
+    Node*left;
+    Node*right;
+    Node(int val){
+        this->data=val;
+        this->left=NULL;
+        this->right=NULL;
+    }
+    
+};
+void inorder(Node* node){
+    if(node==NULL) return;
+    inorder(node->left);
+    cout<<node->data<<" ";
+    inorder(node->right);
+}
+
+int main() {
+    Node* node=new Node(1);
+    node->left=new Node(2);
+    node->left->left=new Node(3);
+    node->left->right=new Node(4);
+    inorder(node);
+
+    return 0;
+}
+
+
+// Online C++ compiler to run C++ program online
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std;
+vector<int>solve(vector<int>&arr){
+    unordered_map<int,int>mp;
+    for(auto it: arr){
+        mp[it]++;
+    }
+    vector<pair<int,int>>freqv;
+    for(auto it: mp){
+        freqv.push_back(it);
+    }
+    sort(freqv.begin(),freqv.end(),[](const pair<int,int>&a, const pair<int, int >&b){
+        if(a.second==b.second) 
+        return a.first<b.first;
+        return a.second > b.second ;
+    });
+        vector<int>res;
+        for(auto it:freqv){
+        res.insert(res.end(),it.second,it.first);
+        }
+    return res;
+}
+
+int main() {
+    vector<int>arr={1,1,3,4,3,2,3,2,1};
+    vector<int>res=solve(arr);
+    for(auto it:res){
+        cout<<it<<" ";
+    }
+
+    return 0;
+}
+
+// Online C++ compiler to run C++ program online
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std;
+void toh(int n, int a, int b, int c){
+    if(n>0){
+        toh(n-1,a,c,b);
+        cout<<"move from "<<a<<"to"<<c<<endl;
+        toh(n-1,b,a,c);
+    }
+}
+int main() {
+    int n=3;
+    toh(n,1,2,3);
+
+    return 0;
+}
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm> // For swap
+using namespace std;
+
+// Corrected pivot function
+int pivot(vector<int>& v, int low, int high) {
+    int piv = v[low];
+    int i = low;
+    int j = high;
+    while (i < j) {
+        while (v[i] <= piv && i < high) {
+            i++;
+        }
+        while (v[j] > piv && j > low) {
+            j--;
+        }
+        if (i < j) swap(v[i], v[j]);
+    }
+    swap(v[low], v[j]);
+    return j;
+}
+
+// Recursive Quick Sort function
+void qs(vector<int>& v, int low, int high) {
+    if (low < high) {
+        int piv = pivot(v, low, high);
+        qs(v, low, piv - 1);
+        qs(v, piv + 1, high);
+    }
+}
+
+// Wrapper function
+void q(vector<int>& v) {
+    qs(v, 0, v.size() - 1);
+}
+
+int main() {
+    vector<int> v = {1, 4, 6, 3, 2, 0, 9};
+    q(v);
+    cout << "Array after quick sort: ";
+    for (int x : v) {
+        cout << x << " ";
+    }
+    cout << endl;
+    return 0;
+}
+
+
+Priority queue
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Priority Queue class
+class PriorityQueue {
+private:
+    vector<int> heap; // The heap array
+
+    // Helper function to maintain heap property (move up)
+    void heapifyUp(int index) {
+        while (index > 0) {
+            int parent = (index - 1) / 2; // Calculate parent index
+            if (heap[index] > heap[parent]) { // If child is greater than parent
+                swap(heap[index], heap[parent]); // Swap them
+                index = parent; // Move index to parent for further checks
+            } else {
+                break; // Stop if heap property is satisfied
+            }
+        }
+    }
+
+    // Helper function to maintain heap property (move down)
+    void heapifyDown(int index) {
+        int n = heap.size();
+        while (true) {
+            int left = 2 * index + 1; // Left child index
+            int right = 2 * index + 2; // Right child index
+            int largest = index; // Assume current node is largest
+
+            // Check if left child exists and is greater
+            if (left < n && heap[left] > heap[largest]) {
+                largest = left;
+            }
+            // Check if right child exists and is greater
+            if (right < n && heap[right] > heap[largest]) {
+                largest = right;
+            }
+
+            if (largest != index) { // If largest is not the current node
+                swap(heap[index], heap[largest]); // Swap with the larger child
+                index = largest; // Move index to child
+            } else {
+                break; // Stop if heap property is satisfied
+            }
+        }
+    }
+
+public:
+    // Push element into the priority queue
+    void push(int val) {
+        heap.push_back(val); // Add value to the heap
+        heapifyUp(heap.size() - 1); // Restore heap property
+    }
+
+    // Pop the maximum element from the priority queue
+    void pop() {
+        if (heap.empty()) {
+            cout << "Priority queue is empty!" << endl;
+            return;
+        }
+        heap[0] = heap.back(); // Replace root with the last element
+        heap.pop_back(); // Remove the last element
+        heapifyDown(0); // Restore heap property
+    }
+
+    // Get the maximum element (top of the priority queue)
+    int top() {
+        if (heap.empty()) {
+            cout << "Priority queue is empty!" << endl;
+            return -1;
+        }
+        return heap[0]; // Return the root element
+    }
+
+    // Check if the priority queue is empty
+    bool empty() {
+        return heap.empty();
+    }
+
+    // Display all elements of the priority queue
+    void display() {
+        for (int val : heap) {
+            cout << val << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    PriorityQueue pq;
+
+    pq.push(30);
+    pq.push(20);
+    pq.push(15);
+    pq.push(10);
+
+    cout << "Priority queue elements: ";
+    pq.display();
+
+    cout << "Top element: " << pq.top() << endl;
+
+    pq.pop();
+    cout << "After popping top element: ";
+    pq.display();
+
+    return 0;
+}
+
+
+
+
